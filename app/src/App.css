@@ -4,6 +4,26 @@
 @theme {
     --font-oxygen-mono: "Oxygen Mono", monospace;
     --font-anton: "Anton", sans-serif;
+    --animate-vertical: vertical-scroll 2s linear infinite;
+    --animate-horizontal: horizontal-scroll 2s linear infinite;
+}
+
+@keyframes vertical-scroll {
+  from {
+    transform: translateY(-20rem);
+  }
+  to {
+    transform: translateY(-12.1rem);
+  }
+}
+
+@keyframes horizontal-scroll {
+    from {
+      transform: translateX(-20rem);
+    }
+    to {
+      transform: translateX(-12.1rem);
+    }
 }
 
 .dotted-bg {
