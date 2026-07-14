@@ -2,9 +2,9 @@ import CustomWalletButton from "./components/wallet-ui/CustomWalletButton";
 
 function App() {
   return (
-    <div>
-      <header className="bg-white border-2 p-2 px-6 fixed w-[calc(100vw-38px)] left-[38px] flex justify-between items-center">
-        <h2 className="font-anton pl-2 text-3xl -skew-x-[24deg] justify-self-center">
+    <div className="min-h-screen">
+      <header className="bg-white border-2 p-2 px-6 fixed top-0 w-[calc(100vw-38px)] left-[38px] grid grid-cols-[1fr_auto] items-center z-10">
+        <h2 className="font-anton pl-2 text-3xl -skew-x-[24deg] justify-self-start">
           COCAINE.LEGAL
         </h2>
         <div className="justify-self-end">
@@ -12,7 +12,16 @@ function App() {
         </div>
       </header>
 
-      <InfiniteStripe></InfiniteStripe>
+      <aside className="fixed top-0 left-0 h-screen w-[38px]">
+        <InfiniteStripe />
+      </aside>
+
+      <main className="ml-[38px] pt-[64px]">
+        <section className="flex justify-center p-10 flex-col">
+          <h3 className="font-anton text-8xl break-all">UUUUUUOOOHHHHHHHOOHOHHOOHHOOHOHHOHOHHOOHHOOHOHHOHOHOHOHHOOHOOHOHOHOHOHOHOOHOHHOOHHOHOHOHHOOHOHOHOOOO</h3>
+          <p className="font-oxygen-mono">cringe edgy emails. tokenized. unstoppable. magnificent.</p>
+        </section>
+      </main>
     </div>
   );
 }
