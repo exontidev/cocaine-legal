@@ -5,3 +5,8 @@
     --font-oxygen-mono: "Oxygen Mono", monospace;
     --font-anton: "Anton", sans-serif;
 }
+
+.dotted-bg {
+  background-image: radial-gradient(circle, #999 1px, transparent 1px);
+  background-size: 20px 20px;
+}

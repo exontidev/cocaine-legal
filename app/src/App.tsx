@@ -17,9 +17,11 @@ function App() {
       </aside>
 
       <main className="ml-[38px] pt-[64px]">
-        <section className="flex justify-center p-10 flex-col">
-          <h3 className="font-anton text-8xl break-all">UUUUUUOOOHHHHHHHOOHOHHOOHHOOHOHHOHOHHOOHHOOHOHHOHOHOHOHHOOHOOHOHOHOHOHOHOOHOHHOOHHOHOHOHHOOHOHOHOOOO</h3>
-          <p className="font-oxygen-mono">cringe edgy emails. tokenized. unstoppable. magnificent.</p>
+        <section className="border-b-2 dotted-bg flex justify-center h-[900px]">
+          <div className="flex bg-white h-fit mt-40 justify-center border-4 p-5 m-10 flex-col gap-2 skew-y-12 w-[1000px] shadow-[8px_8px_0px_rgba(0,0,0,1)]">
+            <h3 className="font-anton text-4xl sm:text-8xl break-all ">UUUUUUOOOHHHHHHHOOHOHHOOHHOOHOHHOHOHHOOHHOOHOHHOHOHOHOHHOOHOOHOHOHOHOHOHOOHOHHOOHHOHOHOHHOOHOHOHOOOO</h3>
+            <p className="font-oxygen-mono">cringe edgy emails. ownership settled on solana. unstoppable. magnificent.</p>
+          </div>
         </section>
       </main>
     </div>
