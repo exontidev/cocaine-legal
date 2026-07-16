@@ -77,7 +77,7 @@ function CustomWalletDropdown({
   return (
     <div
       className={`
-      w-44 z-40 absolute top-[45px]
+      w-44 z-40 absolute top-[48px]
       bg-white
       flex justify-center items-center flex-col
       p-2
