@@ -8,6 +8,14 @@ pub struct Initialize<'info> {
     pub payer: Signer<'info>,
 
     #[account(
+        mut,
+        seeds = [FEE_VAULT_SEED],
+        bump
+    )]
+    pub fee_vault: SystemAccount<'info>,
+    pub fee_authority: SystemAccount<'info>,
+
+    #[account(
         init,
         payer = payer,
         space = 8 + Config::INIT_SPACE,

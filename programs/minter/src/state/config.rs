@@ -8,4 +8,5 @@ pub struct Config {
     pub fee: AmountU64<9>,
     pub collection: Pubkey,
     pub supply: u8,
+    pub fee_authority: Pubkey,
 }

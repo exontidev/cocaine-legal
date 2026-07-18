@@ -9,7 +9,7 @@ use {
         token_2022,
     },
     litesvm::LiteSVM,
-    minter::AmountU64,
+    minter::{AmountU64, FEE_VAULT_SEED},
     solana_keypair::Keypair,
     solana_message::{Message, VersionedMessage},
     solana_signer::Signer,
@@ -30,6 +30,8 @@ fn test_initialize() {
         payer: payer.pubkey(),
         config: Pubkey::find_program_address(&[b"config"], &program_id).0,
         system_program: system_program::id(),
+        fee_vault: Pubkey::find_program_address(&[FEE_VAULT_SEED], &program_id).0,
+        fee_authority: payer.pubkey(),
     };
 
     let data = minter::instruction::Initialize {
@@ -66,6 +68,7 @@ fn test_initialize() {
         associated_token_program: AssociatedToken::id(),
         system_program: system_program::id(),
         token_program: token_2022::ID,
+        fee_vault: Pubkey::find_program_address(&[FEE_VAULT_SEED], &program_id).0,
     };
 
     let data = minter::instruction::Mint {};
