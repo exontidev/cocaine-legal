@@ -71,7 +71,9 @@ fn test_initialize() {
         fee_vault: Pubkey::find_program_address(&[FEE_VAULT_SEED], &program_id).0,
     };
 
-    let data = minter::instruction::Mint {};
+    let data = minter::instruction::Mint {
+        prefix: String::from("dealer"),
+    };
 
     let ix = Instruction {
         program_id,

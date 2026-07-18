@@ -4,7 +4,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
     token_2022::{self, spl_token_2022::instruction::AuthorityType, Token2022},
-    token_interface::{Mint, TokenAccount},
+    token_interface::{Mint, TokenAccount, TokenMetadataInitialize},
 };
 
 #[derive(Accounts)]
@@ -105,6 +105,7 @@ pub fn revoke_mint_authority(ctx: &Context<MintContext>) -> Result<()> {
     token_2022::set_authority(revoke_ctx, AuthorityType::MintTokens, None)
 }
 
-pub fn create_metadata(ctx: &Context<MintContext>) -> Result<()> {
+pub fn create_metadata(ctx: &Context<MintContext>, prefix: &str) -> Result<()> {
+    msg!("{}@cocaine.legal was created", &prefix);
     Ok(())
 }

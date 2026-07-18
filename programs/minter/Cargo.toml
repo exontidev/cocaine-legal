@@ -23,6 +23,7 @@ custom-panic = []
 [dependencies]
 anchor-lang = "1.1.2"
 anchor-spl = "1.1.2"
+mpl-token-metadata = "5.1.1"
 
 [dev-dependencies]
 litesvm = "0.10.0"

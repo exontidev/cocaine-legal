@@ -29,7 +29,6 @@ export default function CustomWalletButton() {
             z-50
             w-full
             cursor-pointer
-            ${dropdownShows ? "border-gray-500" : "border-black"}
           `}
           onClick={() => setVisible(true)}
         >
@@ -81,7 +80,7 @@ function CustomWalletDropdown({
       bg-white
       flex justify-center items-center flex-col
       p-2
-      border-2 border-gray-500
+      border-2 border-black
       transition-all duration-100
        ${enabled ? "opacity-100 h-[119px]" : "opacity-0 h-0 invisible pointer-events-none"}`}
     >
