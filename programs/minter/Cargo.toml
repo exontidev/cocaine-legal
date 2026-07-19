@@ -21,15 +21,15 @@ custom-panic = []
 
 
 [dependencies]
-anchor-lang = "1.1.2"
-anchor-spl = "1.1.2"
-
-[dev-dependencies]
-litesvm = "0.10.0"
-solana-message = "3.0.1"
-solana-transaction = "3.0.2"
-solana-signer = "3.0.0"
-solana-keypair = "3.0.1"
+anchor-lang = "0.31.1"
+anchor-spl = "0.31.1"
+mpl-core = {version = "0.11.1", default-features = false, features = ["anchor"] }
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+
+[dev-dependencies]
+litesvm = "0.6.1"
+solana-keypair = "2.2.1"
+solana-signer = "2.2.1"
+solana-transaction = "2.2.1"
