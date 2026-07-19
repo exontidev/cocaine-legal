@@ -3,6 +3,7 @@ pub mod emits;
 pub mod error;
 pub mod helper;
 pub mod instructions;
+pub mod metaplex;
 pub mod state;
 
 use anchor_lang::prelude::*;
@@ -11,9 +12,10 @@ pub use constants::*;
 pub use emits::*;
 pub use helper::*;
 pub use instructions::*;
+pub use metaplex::*;
 pub use state::*;
 
-declare_id!("FfHBH4w4ubu9GWDHcF4pzEA3VKDobQMYZq2JSCKZdQQz");
+declare_id!("3VkR6Q98H8tSCrC28GT8ePJcWYHkhvmM1rFo8BhcZc9E");
 
 #[program]
 pub mod minter {

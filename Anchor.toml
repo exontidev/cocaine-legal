@@ -7,7 +7,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-minter = "FfHBH4w4ubu9GWDHcF4pzEA3VKDobQMYZq2JSCKZdQQz"
+minter = "3VkR6Q98H8tSCrC28GT8ePJcWYHkhvmM1rFo8BhcZc9E"
 
 [provider]
 cluster = "localnet"

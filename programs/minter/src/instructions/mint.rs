@@ -1,9 +1,10 @@
-use crate::{Config, MINT_AUTHORITY_SEED};
+use crate::{Config, CreateMetadataAccountArgsV3, DataV2, MINT_AUTHORITY_SEED};
 
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token_2022::{self, spl_token_2022::instruction::AuthorityType, Token2022},
+    token::{self, spl_token::instruction::AuthorityType},
+    token_2022::{self, Token2022},
     token_interface::{Mint, TokenAccount, TokenMetadataInitialize},
 };
 
@@ -44,7 +45,25 @@ pub struct MintContext<'info> {
 
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, Token2022>,
+    pub token_program: Program<'info, token::Token>,
+
+    #[account(
+        mut,
+        seeds = [
+            b"metadata",
+            token_metadata_program.key().as_ref(),
+            mint.key().as_ref(),
+        ],
+        bump,
+        seeds::program = token_metadata_program.key(),
+    )]
+    /// CHECK: validated via seeds constraint against the Token Metadata program
+    pub metadata: UncheckedAccount<'info>,
+    pub rent: Sysvar<'info, Rent>,
+
+    #[account(address = crate::mpl_token_metadata_id())]
+    /// CHECK: validating mpl address
+    pub token_metadata_program: UncheckedAccount<'info>,
 }
 
 pub fn deduct_fee(ctx: &Context<MintContext>) -> Result<()> {
@@ -69,7 +88,7 @@ pub fn mint_nft(ctx: &Context<MintContext>) -> Result<()> {
     let mint_authority = &ctx.accounts.mint_authority;
     let mint_authority_bump = ctx.bumps.mint_authority;
 
-    let mint_accounts = token_2022::MintToChecked {
+    let mint_accounts = token::MintTo {
         mint: mint.to_account_info(),
         to: token_account.to_account_info(),
         authority: mint_authority.to_account_info(),
@@ -80,7 +99,7 @@ pub fn mint_nft(ctx: &Context<MintContext>) -> Result<()> {
     let cpi_mint_context =
         CpiContext::new_with_signer(token_2022::ID, mint_accounts, authority_seeds);
 
-    token_2022::mint_to_checked(cpi_mint_context, 1, 0)?;
+    token::mint_to(cpi_mint_context, 1)?;
 
     Ok(())
 }
@@ -94,7 +113,7 @@ pub fn revoke_mint_authority(ctx: &Context<MintContext>) -> Result<()> {
     let mint_authority_bump = ctx.bumps.mint_authority;
     let authority_seeds: &[&[&[u8]]] = &[&[MINT_AUTHORITY_SEED, &[mint_authority_bump]]];
 
-    let revoke_accounts = token_2022::SetAuthority {
+    let revoke_accounts = token::SetAuthority {
         current_authority: mint_authority.to_account_info(),
         account_or_mint: mint.to_account_info(),
     };
@@ -102,10 +121,31 @@ pub fn revoke_mint_authority(ctx: &Context<MintContext>) -> Result<()> {
     let revoke_ctx =
         CpiContext::new_with_signer(*token_program.key, revoke_accounts, authority_seeds);
 
-    token_2022::set_authority(revoke_ctx, AuthorityType::MintTokens, None)
+    token::set_authority(revoke_ctx, AuthorityType::MintTokens, None)
 }
 
 pub fn create_metadata(ctx: &Context<MintContext>, prefix: &str) -> Result<()> {
+    let mint_authority_bump = ctx.bumps.mint_authority;
+    let authority_seeds: &[&[&[u8]]] = &[&[MINT_AUTHORITY_SEED, &[mint_authority_bump]]];
+
+    crate::create_metadata_v3_cpi_signed(
+        ctx,
+        CreateMetadataAccountArgsV3 {
+            data: DataV2 {
+                name: String::from("cocaine mails"),
+                symbol: String::from("1"),
+                uri: String::from("metadata.cocaine.legal/mint/test"),
+                seller_fee_basis_points: 0,
+                creators: None,
+                collection: None,
+                uses: None,
+            },
+            is_mutable: false,
+            collection_details: None,
+        },
+        authority_seeds,
+    )?;
+
     msg!("{}@cocaine.legal was created", &prefix);
     Ok(())
 }
