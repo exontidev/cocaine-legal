@@ -10,7 +10,8 @@ use {
     },
     litesvm::LiteSVM,
     minter::{
-        AmountU64, InitializeArgs, MintArgs, CONFIG_SEED, FEE_VAULT_SEED, UPDATE_AUTHORITY_SEED,
+        AmountU64, ForwardArgs, InitializeArgs, MintArgs, CONFIG_SEED, FEE_VAULT_SEED,
+        FORWARD_SEED, UPDATE_AUTHORITY_SEED,
     },
     solana_keypair::Keypair,
     solana_signer::Signer,
@@ -21,7 +22,6 @@ use {
 #[test]
 fn test_initialize() {
     let program_id = minter::id();
-    let payer = Keypair::new();
     let mut svm = LiteSVM::new();
 
     let program_bytes =
@@ -32,10 +32,18 @@ fn test_initialize() {
     svm.add_program(mpl_core::ID, mpl_bytes);
     svm.add_program(program_id, program_bytes);
 
+    let payer = Keypair::new();
+    let collection = Keypair::new();
+    let asset = Keypair::new();
+
     svm.airdrop(&payer.pubkey(), 1_000_000_000).unwrap();
 
-    let collection = Keypair::new();
+    initialize(&mut svm, &payer, &collection, program_id);
+    mint(&mut svm, &payer, &asset, &collection, program_id);
+    forward(&mut svm, &payer, &asset, &collection, program_id);
+}
 
+fn initialize(svm: &mut LiteSVM, payer: &Keypair, collection: &Keypair, program_id: Pubkey) {
     let accounts = minter::accounts::Initialize {
         payer: payer.pubkey(),
         config: Pubkey::find_program_address(&[CONFIG_SEED], &program_id).0,
@@ -69,15 +77,15 @@ fn test_initialize() {
     );
 
     let result = svm.send_transaction(tx).unwrap();
-    // dbg!(result.logs);
+}
 
-    let account_data =
-        svm.get_account(&Pubkey::find_program_address(&[CONFIG_SEED], &program_id).0);
-
-    // dbg!(account_data);
-
-    let asset = Keypair::new();
-
+fn mint(
+    svm: &mut LiteSVM,
+    payer: &Keypair,
+    asset: &Keypair,
+    collection: &Keypair,
+    program_id: Pubkey,
+) {
     let mint_accounts = minter::accounts::MintContext {
         asset: asset.pubkey(),
         collection: collection.pubkey(),
@@ -101,6 +109,8 @@ fn test_initialize() {
         data: mint_message.data(),
     };
 
+    let blockhash = svm.latest_blockhash();
+
     let tx = Transaction::new_signed_with_payer(
         &[ix],
         Some(&payer.pubkey()),
@@ -110,4 +120,48 @@ fn test_initialize() {
 
     let result = svm.send_transaction(tx).unwrap();
     dbg!(result.logs);
+}
+
+fn forward(
+    svm: &mut LiteSVM,
+    payer: &Keypair,
+    asset: &Keypair,
+    collection: &Keypair,
+    program_id: Pubkey,
+) {
+    let mint_accounts = minter::accounts::Forward {
+        asset: asset.pubkey(),
+        collection: collection.pubkey(),
+
+        payer: payer.pubkey(),
+        config: Pubkey::find_program_address(&[CONFIG_SEED], &program_id).0,
+        system_program: system_program::id(),
+
+        forward: Pubkey::find_program_address(
+            &[FORWARD_SEED, asset.pubkey().as_array()],
+            &program_id,
+        )
+        .0,
+    };
+
+    let mint_message = minter::instruction::Forward {
+        args: ForwardArgs {
+            encrypted_prefix: String::from("dealer"),
+        },
+    };
+
+    let ix = Instruction {
+        program_id,
+        accounts: mint_accounts.to_account_metas(None),
+        data: mint_message.data(),
+    };
+
+    let blockhash = svm.latest_blockhash();
+
+    let tx = Transaction::new_signed_with_payer(&[ix], Some(&payer.pubkey()), &[&payer], blockhash);
+    let result = svm.send_transaction(tx).unwrap();
+
+    dbg!(svm.get_account(
+        &Pubkey::find_program_address(&[FORWARD_SEED, asset.pubkey().as_array()], &program_id,).0
+    ));
 }

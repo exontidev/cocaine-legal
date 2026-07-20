@@ -37,6 +37,7 @@ pub struct MintContext<'info> {
     pub mpl_core_program: UncheckedAccount<'info>,
 }
 
+/// TODO: prefix encrypted
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct MintArgs {
     pub prefix: String,
@@ -82,5 +83,6 @@ fn mint_nft(ctx: &Context<MintContext>, args: MintArgs) -> Result<()> {
             ctx.accounts.asset.key
         ))
         .invoke_signed(signer_seeds)?;
+
     Ok(())
 }

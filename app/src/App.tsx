@@ -26,7 +26,7 @@ function App() {
         </div>
       </header>
 
-      <aside className="fixed  z-30 top-14.5 sm:top-0">
+      <aside className="fixed z-30 top-16 sm:top-0">
         <InfiniteStripe />
       </aside>
 

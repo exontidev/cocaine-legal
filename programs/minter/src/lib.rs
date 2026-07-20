@@ -24,4 +24,8 @@ pub mod minter {
     pub fn mint(ctx: Context<MintContext>, args: MintArgs) -> Result<()> {
         handle_mint(ctx, args)
     }
+
+    pub fn forward(ctx: Context<Forward>, args: ForwardArgs) -> Result<()> {
+        handle_forward(ctx, args)
+    }
 }

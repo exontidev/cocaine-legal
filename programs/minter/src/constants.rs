@@ -4,6 +4,9 @@ use anchor_lang::prelude::*;
 pub const MINT_AUTHORITY_SEED: &[u8] = b"mint-authority";
 
 #[constant]
+pub const FORWARD_SEED: &[u8] = b"forward";
+
+#[constant]
 pub const UPDATE_AUTHORITY_SEED: &[u8] = b"update-authority";
 
 #[constant]
