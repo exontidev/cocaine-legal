@@ -5,4 +5,5 @@ use anchor_lang::prelude::*;
 pub struct ForwardStore {
     #[max_len(16)]
     pub encrypted_prefix: String,
+    pub owner: Pubkey,
 }

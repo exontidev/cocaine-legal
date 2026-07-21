@@ -30,6 +30,17 @@ pub struct ForwardArgs {
 }
 
 pub fn handle_forward(ctx: Context<Forward>, args: ForwardArgs) -> Result<()> {
+    validate_nft(&ctx)?;
+
+    let forward = &mut ctx.accounts.forward;
+
+    forward.encrypted_prefix = args.encrypted_prefix;
+    forward.owner = *ctx.accounts.payer.key;
+
+    Ok(())
+}
+
+fn validate_nft(ctx: &Context<Forward>) -> Result<()> {
     let asset = &ctx.accounts.asset;
     let collection = &ctx.accounts.collection;
 
@@ -44,8 +55,11 @@ pub fn handle_forward(ctx: Context<Forward>, args: ForwardArgs) -> Result<()> {
         _ => return err!(ContractError::NotInAnyCollection),
     }
 
-    let forward = &mut ctx.accounts.forward;
-    forward.encrypted_prefix = args.encrypted_prefix;
+    require_keys_eq!(
+        asset.owner,
+        ctx.accounts.payer.key(),
+        ContractError::NotAssetOwner
+    );
 
     Ok(())
 }

@@ -6,4 +6,6 @@ pub enum ContractError {
     WrongCollection,
     #[msg("Provided mint doesn't have collection")]
     NotInAnyCollection,
+    #[msg("Payer doesn't own the given NFT")]
+    NotAssetOwner,
 }

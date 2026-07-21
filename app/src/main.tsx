@@ -20,6 +20,7 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 import "./App.css";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import { BrowserRouter } from "react-router-dom";
 
 function Wrapper() {
   const network = WalletAdapterNetwork.Devnet;
@@ -57,4 +58,4 @@ function Wrapper() {
   );
 }
 
-createRoot(document.getElementById("root")!).render(<Wrapper />);
+createRoot(document.getElementById("root")!).render(<BrowserRouter><Wrapper /></BrowserRouter>);
